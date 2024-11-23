@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: '../.env' });
 
 const express = require("express");
 const cors = require("cors");
@@ -10,8 +10,7 @@ const userRoutes = require("./routes/userRoute");
 const app = express();
 
 // port
-const port = process.env.PORT || 4000;
-
+const { port, mongoUri  } = require('./config');
 // middlewares
 app.use(cors());
 app.use(express.json());
@@ -27,7 +26,7 @@ app.use("/api/user", userRoutes);
 // connecting to the database(mongodb)
 mongoose.set("strictQuery", false);
 mongoose
-  .connect(process.env.MONGO_URI, {
+  .connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
