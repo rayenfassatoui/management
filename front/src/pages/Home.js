@@ -55,17 +55,17 @@ const Home = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark-bg dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Dashboard Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Project Dashboard</h1>
-          <p className="text-gray-600">Welcome back, {user.email}</p>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Project Dashboard</h1>
+          <p className="text-gray-600 dark:text-gray-300">Welcome back, {user.email}</p>
         </div>
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white dark:bg-dark-card rounded-xl shadow-sm p-6">
             <div className="flex items-center">
               <div className="p-3 bg-indigo-50 rounded-lg">
                 <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +79,7 @@ const Home = () => {
             </div>
           </div>
           
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white dark:bg-dark-card rounded-xl shadow-sm p-6">
             <div className="flex items-center">
               <div className="p-3 bg-green-50 rounded-lg">
                 <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,7 +95,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white dark:bg-dark-card rounded-xl shadow-sm p-6">
             <div className="flex items-center">
               <div className="p-3 bg-purple-50 rounded-lg">
                 <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,7 +111,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white dark:bg-dark-card rounded-xl shadow-sm p-6">
             <div className="flex items-center">
               <div className="p-3 bg-yellow-50 rounded-lg">
                 <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,7 +131,7 @@ const Home = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Projects Section */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white dark:bg-dark-card rounded-xl shadow-sm p-6">
               {/* Search and Filters */}
               <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                 <div className="relative w-full sm:w-64">
@@ -154,10 +154,11 @@ const Home = () => {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-lg 
-                      focus:ring-2 focus:ring-indigo-500 focus:border-transparent
-                      text-gray-900 bg-white cursor-pointer
-                      appearance-none pr-8"
+                    className="px-3 py-2 border border-gray-300 dark:border-dark-border 
+                      rounded-lg focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 
+                      focus:border-indigo-500 dark:focus:border-indigo-400
+                      text-gray-900 dark:text-white bg-white dark:bg-dark-card cursor-pointer
+                      appearance-none pr-8 transition-colors duration-200"
                     style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
                   >
                     <option value="newest" className="text-gray-900">Newest First</option>
@@ -174,7 +175,11 @@ const Home = () => {
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-indigo-50 text-indigo-600' : 'text-gray-400'}`}
+                      className={`p-2 rounded-lg transition-colors duration-200
+                        ${viewMode === 'grid' 
+                          ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400' 
+                          : 'text-gray-400 dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-dark-border'
+                        }`}
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -221,7 +226,7 @@ const Home = () => {
           {/* Form Section */}
           <div className="lg:col-span-1">
             <div className="sticky top-6">
-              <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="bg-white dark:bg-dark-card rounded-xl shadow-sm p-6">
                 <ProjectForm />
               </div>
             </div>

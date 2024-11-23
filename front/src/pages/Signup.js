@@ -13,7 +13,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center bg-gradient-to-br from-indigo-500 to-purple-600 py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col justify-center bg-gradient-to-br from-indigo-500 to-purple-600 dark:from-indigo-900 dark:to-purple-900 py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-4xl font-extrabold text-white">
           Create your account
@@ -27,10 +27,10 @@ const Signup = () => {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-xl shadow-indigo-500/20 sm:rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-dark-card py-8 px-4 shadow-xl shadow-indigo-500/20 dark:shadow-indigo-900/30 sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSignup}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Email address
               </label>
               <div className="mt-1">
@@ -41,14 +41,21 @@ const Signup = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="appearance-none block w-full px-3 py-2 
+                    border border-gray-300 dark:border-dark-border 
+                    rounded-md shadow-sm 
+                    placeholder-gray-400 dark:placeholder-gray-500
+                    bg-white dark:bg-dark-card
+                    text-gray-900 dark:text-white
+                    focus:outline-none focus:ring-indigo-500 dark:focus:ring-indigo-400 
+                    focus:border-indigo-500 dark:focus:border-indigo-400"
                   placeholder="Enter your email"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                 Password
               </label>
               <div className="mt-1">
@@ -59,11 +66,18 @@ const Signup = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="appearance-none block w-full px-3 py-2 
+                    border border-gray-300 dark:border-dark-border 
+                    rounded-md shadow-sm 
+                    placeholder-gray-400 dark:placeholder-gray-500
+                    bg-white dark:bg-dark-card
+                    text-gray-900 dark:text-white
+                    focus:outline-none focus:ring-indigo-500 dark:focus:ring-indigo-400 
+                    focus:border-indigo-500 dark:focus:border-indigo-400"
                   placeholder="Create a strong password"
                 />
               </div>
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 Must be at least 8 characters with 1 uppercase, 1 number, and 1 special character
               </p>
             </div>
@@ -72,7 +86,15 @@ const Signup = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center py-2 px-4 
+                  border border-transparent rounded-md shadow-sm 
+                  text-sm font-medium text-white 
+                  bg-indigo-600 hover:bg-indigo-700 
+                  dark:bg-indigo-500 dark:hover:bg-indigo-600
+                  focus:outline-none focus:ring-2 
+                  focus:ring-offset-2 focus:ring-indigo-500 
+                  dark:focus:ring-offset-dark-card
+                  disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -87,7 +109,7 @@ const Signup = () => {
           </form>
 
           {error && (
-            <div className="mt-4 rounded-md bg-red-50 p-4">
+            <div className="mt-4 rounded-md bg-red-50 dark:bg-red-900/30 p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -95,7 +117,7 @@ const Signup = () => {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-red-800">{error}</p>
+                  <p className="text-sm font-medium text-red-800 dark:text-red-200">{error}</p>
                 </div>
               </div>
             </div>

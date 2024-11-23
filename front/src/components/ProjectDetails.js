@@ -46,12 +46,12 @@ const ProjectDetails = ({ project }) => {
   };
 
   return (
-    <div className="project bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+    <div className="project bg-white dark:bg-dark-card p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-xl font-bold text-gray-900">{project.title}</h3>
-            <span className="text-sm text-gray-500">{project.tech}</span>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">{project.title}</h3>
+            <span className="text-sm text-gray-500 dark:text-gray-400">{project.tech}</span>
           </div>
           <span className="px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-full font-medium">
             {currencyFormatter(project.budget)}

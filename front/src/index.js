@@ -5,16 +5,19 @@ import App from "./App";
 import "./index.css";
 import { ProjectContextProvider } from "./context/ProjectContext";
 import { AuthContextProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ProjectContextProvider>
-        <AuthContextProvider>
-          <App />
-        </AuthContextProvider>
-      </ProjectContextProvider>
+      <ThemeProvider>
+        <ProjectContextProvider>
+          <AuthContextProvider>
+            <App />
+          </AuthContextProvider>
+        </ProjectContextProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
