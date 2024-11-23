@@ -2,6 +2,21 @@
 
 A modern, responsive project management dashboard built with React and Tailwind CSS, featuring both light and dark modes.
 
+![Project Dashboard Dark Mode](./front/src/img/dashbord_dark.png)
+
+### 📸 Screenshots
+
+<details>
+<summary>View More Screenshots</summary>
+
+#### Dark Mode Dashboard
+![Dashboard Dark](./front/src/img/dashboard_dark.png)        
+
+#### Light Mode Dashboard
+![Dashboard Light](./front/src/img/dashboard_light.png)
+
+</details>
+
 ## 🌟 Features
 
 - **Authentication System**
