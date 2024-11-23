@@ -10,10 +10,10 @@ A modern, responsive project management dashboard built with React and Tailwind 
 <summary>View More Screenshots</summary>
 
 #### Dark Mode Dashboard
-![Dashboard Dark](./front/src/img/dashboard_dark.png)        
+![Dashboard Dark](./front/src/img/dashbord_dark.png)        
 
 #### Light Mode Dashboard
-![Dashboard Light](./front/src/img/dashboard_light.png)
+![Dashboard Light](./front/src/img/dashbord_ligth.png)
 
 </details>
 
