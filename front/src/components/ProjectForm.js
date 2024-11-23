@@ -9,7 +9,6 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
   const [duration, setDuration] = useState(project ? project.duration : "");
   const [manager, setManager] = useState(project ? project.manager : "");
   const [dev, setDev] = useState(project ? project.dev : "");
-
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
@@ -102,155 +101,155 @@ const ProjectForm = ({ project, setIsModalOpen, setIsOverlayOpen }) => {
     }
   };
 
+  const inputClass = (field) => `
+    w-full px-3 py-2 
+    bg-white 
+    text-gray-900
+    border ${emptyFields?.includes(field) ? 'border-red-300' : 'border-gray-300'} 
+    rounded-md 
+    shadow-sm 
+    placeholder-gray-400 
+    focus:outline-none 
+    focus:ring-2 
+    focus:ring-indigo-500 
+    focus:border-indigo-500 
+    sm:text-sm
+    transition duration-150
+  `;
+
   return (
-    <form onSubmit={handleSubmit} className="project-form flex flex-col gap-5">
-      <h2
-        className={`text-4xl font-medium text-sky-400 mb-10 capitalize ${
-          project ? "hidden" : ""
-        }`}
-      >
-        Add a new project
-      </h2>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {!project && (
+        <h3 className="text-xl font-semibold text-gray-900">
+          Create New Project
+        </h3>
+      )}
 
-      <div className="form-control flex flex-col gap-2">
-        <label
-          htmlFor="title"
-          className="cursor-pointer hover:text-sky-400 duration-300"
-        >
-          Project Title
-        </label>
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          type="text"
-          placeholder="e.g. e-commerce website"
-          id="title"
-          className={`bg-transparent border  py-3 px-5 rounded-lg outline-none focus:border-sky-400 duration-300 ${
-            emptyFields?.includes("title")
-              ? "border-rose-500"
-              : "border-slate-500"
-          }`}
-        />
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+            Project Title
+          </label>
+          <div className="mt-1">
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g. E-commerce Website"
+              className={inputClass('title')}
+            />
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="tech" className="block text-sm font-medium text-gray-700">
+            Technologies
+          </label>
+          <div className="mt-1">
+            <input
+              type="text"
+              id="tech"
+              value={tech}
+              onChange={(e) => setTech(e.target.value)}
+              placeholder="e.g. React, Node.js, MongoDB"
+              className={inputClass('tech')}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="budget" className="block text-sm font-medium text-gray-700">
+              Budget (USD)
+            </label>
+            <div className="mt-1">
+              <input
+                type="number"
+                id="budget"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                placeholder="e.g. 5000"
+                className={inputClass('budget')}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
+              Duration (Weeks)
+            </label>
+            <div className="mt-1">
+              <input
+                type="number"
+                id="duration"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                placeholder="e.g. 12"
+                className={inputClass('duration')}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="manager" className="block text-sm font-medium text-gray-700">
+            Project Manager
+          </label>
+          <div className="mt-1">
+            <input
+              type="text"
+              id="manager"
+              value={manager}
+              onChange={(e) => setManager(e.target.value)}
+              placeholder="e.g. John Smith"
+              className={inputClass('manager')}
+            />
+          </div>
+        </div>
+
+        <div>
+          <label htmlFor="dev" className="block text-sm font-medium text-gray-700">
+            Team Size
+          </label>
+          <div className="mt-1">
+            <input
+              type="number"
+              id="dev"
+              value={dev}
+              onChange={(e) => setDev(e.target.value)}
+              placeholder="e.g. 5"
+              className={inputClass('dev')}
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="form-control flex flex-col gap-2">
-        <label
-          htmlFor="tech"
-          className="cursor-pointer hover:text-sky-400 duration-300"
+      <div>
+        <button
+          type="submit"
+          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150"
         >
-          Technologies
-        </label>
-        <input
-          value={tech}
-          onChange={(e) => setTech(e.target.value)}
-          type="text"
-          placeholder="e.g. react.js, redux, node.js"
-          id="tech"
-          className={`bg-transparent border  py-3 px-5 rounded-lg outline-none focus:border-sky-400 duration-300 ${
-            emptyFields?.includes("tech")
-              ? "border-rose-500"
-              : "border-slate-500"
-          }`}
-        />
+          {project ? "Update Project" : "Create Project"}
+        </button>
       </div>
 
-      <div className="form-control flex flex-col gap-2">
-        <label
-          htmlFor="budget"
-          className="cursor-pointer hover:text-sky-400 duration-300"
-        >
-          Budget (in USD)
-        </label>
-        <input
-          value={budget}
-          onChange={(e) => setBudget(e.target.value)}
-          type="number"
-          placeholder="e.g. 500"
-          id="budget"
-          className={`bg-transparent border  py-3 px-5 rounded-lg outline-none focus:border-sky-400 duration-300 ${
-            emptyFields?.includes("budget")
-              ? "border-rose-500"
-              : "border-slate-500"
-          }`}
-        />
-      </div>
-
-      <div className="form-control flex flex-col gap-2">
-        <label
-          htmlFor="duration"
-          className="cursor-pointer hover:text-sky-400 duration-300"
-        >
-          Duration (in week)
-        </label>
-        <input
-          value={duration}
-          onChange={(e) => setDuration(e.target.value)}
-          type="number"
-          placeholder="e.g. 6"
-          id="duration"
-          className={`bg-transparent border  py-3 px-5 rounded-lg outline-none focus:border-sky-400 duration-300 ${
-            emptyFields?.includes("duration")
-              ? "border-rose-500"
-              : "border-slate-500"
-          }`}
-        />
-      </div>
-
-      <div className="form-control flex flex-col gap-2">
-        <label
-          htmlFor="manager"
-          className="cursor-pointer hover:text-sky-400 duration-300"
-        >
-          Manager
-        </label>
-        <input
-          value={manager}
-          onChange={(e) => setManager(e.target.value)}
-          type="text"
-          placeholder="e.g. Tanisha Tanvin"
-          id="manager"
-          className={`bg-transparent border  py-3 px-5 rounded-lg outline-none focus:border-sky-400 duration-300 ${
-            emptyFields?.includes("manager")
-              ? "border-rose-500"
-              : "border-slate-500"
-          }`}
-        />
-      </div>
-
-      <div className="form-control flex flex-col gap-2">
-        <label
-          htmlFor="developer"
-          className="cursor-pointer hover:text-sky-400 duration-300"
-        >
-          Developers
-        </label>
-        <input
-          value={dev}
-          onChange={(e) => setDev(e.target.value)}
-          type="number"
-          placeholder="e.g. 10"
-          id="developer"
-          className={`bg-transparent border  py-3 px-5 rounded-lg outline-none focus:border-sky-400 duration-300 ${
-            emptyFields?.includes("dev")
-              ? "border-rose-500"
-              : "border-slate-500"
-          }`}
-        />
-      </div>
-
-      <button
-        type="submit"
-        className="bg-sky-400 text-slate-900 py-3 rounded-lg hover:bg-sky-50 duration-300 capitalize"
-      >
-        {project ? "Confirm Update" : "Add project"}
-      </button>
       {error && (
-        <p className="bg-rose-500/20 rounded-lg p-5 text-rose-500 border border-rose-500">
-          {error}
-        </p>
+        <div className="rounded-md bg-red-50 p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm font-medium text-red-800">{error}</p>
+            </div>
+          </div>
+        </div>
       )}
     </form>
   );
 };
 
-export default React.memo(ProjectForm);
+export default ProjectForm;

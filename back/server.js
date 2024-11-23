@@ -27,13 +27,16 @@ app.use("/api/user", userRoutes);
 // connecting to the database(mongodb)
 mongoose.set("strictQuery", false);
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
-    // listening request
     app.listen(port, () => {
-      console.log(`Connected to Mongo & Listening on port ${port}`);
+      console.log(`Connected to MongoDB & Server running on port ${port}`);
     });
   })
   .catch((error) => {
-    console.log(error);
+    console.log('MongoDB connection error:', error.message);
+    process.exit(1);
   });
