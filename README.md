@@ -46,7 +46,7 @@ A modern, responsive project management dashboard built with React and Tailwind 
 
 1. Clone the repository: 
 bash
-git clone https://github.com/yourusername/project-management-dashboard.git
+git clone https://github.com/rayenfassatoui/management.git
 2. Install dependencies for frontend:
 bash
 cd front
