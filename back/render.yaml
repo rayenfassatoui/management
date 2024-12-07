@@ -2,7 +2,10 @@ services:
   - type: web
     name: project-management-backend
     env: node
-    buildCommand: npm install
+    buildCommand: |
+      apt-get update && apt-get install -y python3 make g++
+      npm install
+      npm rebuild bcrypt --build-from-source
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -12,4 +15,5 @@ services:
       - key: MONGO_URI
         sync: false
       - key: SECRET
-        sync: false 
+        sync: false
+    nodeVersion: 18.x
