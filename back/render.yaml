@@ -2,10 +2,7 @@ services:
   - type: web
     name: project-management-backend
     env: node
-    buildCommand: |
-      apt-get update && apt-get install -y python3 make g++
-      npm install
-      npm rebuild bcrypt --build-from-source
+    buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
