@@ -1,4 +1,4 @@
-require("dotenv").config({ path: '../.env' });
+require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
@@ -10,23 +10,20 @@ const userRoutes = require("./routes/userRoute");
 const app = express();
 
 // port
-const { port, mongoUri  } = require('./config');
+const { port, mongoUri } = require('./config');
+
 // middlewares
 app.use(cors({
   origin: ['https://your-frontend-domain.vercel.app', 'http://localhost:3000'],
   credentials: true
 }));
 app.use(express.json());
-app.use((req, res, next) => {
-  console.log(req.path, req.method);
-  next();
-});
 
 // routes
 app.use("/api/projects", projectsRoutes);
 app.use("/api/user", userRoutes);
 
-// connecting to the database(mongodb)
+// connecting to the database
 mongoose.set("strictQuery", false);
 mongoose
   .connect(mongoUri, {
@@ -34,11 +31,18 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(port, () => {
-      console.log(`Connected to MongoDB & Server running on port ${port}`);
-    });
+    if (process.env.NODE_ENV !== 'production') {
+      app.listen(port, () => {
+        console.log(`Connected to MongoDB & Server running on port ${port}`);
+      });
+    }
   })
   .catch((error) => {
     console.log('MongoDB connection error:', error.message);
-    process.exit(1);
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
   });
+
+// For Vercel serverless deployment
+module.exports = app;
