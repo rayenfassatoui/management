@@ -12,7 +12,10 @@ const app = express();
 // port
 const { port, mongoUri  } = require('./config');
 // middlewares
-app.use(cors());
+app.use(cors({
+  origin: ['https://your-frontend-domain.vercel.app', 'http://localhost:3000'],
+  credentials: true
+}));
 app.use(express.json());
 app.use((req, res, next) => {
   console.log(req.path, req.method);
