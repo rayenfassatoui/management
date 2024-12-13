@@ -9,12 +9,9 @@ const userRoutes = require("./routes/userRoute");
 // express app
 const app = express();
 
-// port
-const port = process.env.PORT || 4000;
-
 // middlewares
 app.use(cors({
-  origin: ['your-frontend-url.vercel.app', 'http://localhost:3000'],
+  origin: ['http://localhost:3000', process.env.FRONTEND_URL],
   credentials: true
 }));
 app.use(express.json());
@@ -23,20 +20,25 @@ app.use((req, res, next) => {
   next();
 });
 
+// Error logging
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+});
+
+// Test route
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API is working' });
+});
+
 // routes
 app.use("/api/projects", projectsRoutes);
 app.use("/api/user", userRoutes);
 
-// Add this before your other routes
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', message: 'Server is running' });
-});
-
-// Add this after your routes
-app.use((req, res) => {
-  res.status(404).json({ error: "Route not found" });
-});
-
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error details:', {
     name: err.name,
@@ -52,39 +54,60 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Add this near the top of your file after the imports
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-});
-
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
-});
-
 // connecting to the database(mongodb)
 mongoose.set("strictQuery", false);
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000,
-  })
-  .then(() => {
-    console.log('MongoDB connected successfully');
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
-  })
-  .catch((error) => {
-    console.error('MongoDB connection error details:', {
-      name: error.name,
-      message: error.message,
-      stack: error.stack
-    });
-    process.exit(1);
-  });
 
-// Add a test route to verify basic functionality
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'API is working' });
-});
+// Only connect to MongoDB if we're not in a Vercel environment
+if (process.env.NODE_ENV !== 'production') {
+  mongoose
+    .connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+    })
+    .then(() => {
+      const port = process.env.PORT || 4000;
+      app.listen(port, () => {
+        console.log(`Connected to MongoDB & Server running on port ${port}`);
+      });
+    })
+    .catch((error) => {
+      console.error('MongoDB connection error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+      process.exit(1);
+    });
+}
+
+// For Vercel, we'll connect to MongoDB for each request
+if (process.env.NODE_ENV === 'production') {
+  let cachedDb = null;
+
+  async function connectToDatabase() {
+    if (cachedDb) {
+      return cachedDb;
+    }
+    
+    const db = await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    
+    cachedDb = db;
+    return db;
+  }
+
+  app.use(async (req, res, next) => {
+    try {
+      await connectToDatabase();
+      next();
+    } catch (error) {
+      console.error('MongoDB connection error:', error);
+      res.status(500).json({ error: 'Database connection failed' });
+    }
+  });
+}
+
+module.exports = app;
