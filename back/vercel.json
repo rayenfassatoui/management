@@ -16,6 +16,12 @@
       "dest": "/api/index.js"
     }
   ],
+  "functions": {
+    "api/index.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
   "env": {
     "NODE_ENV": "production"
   }

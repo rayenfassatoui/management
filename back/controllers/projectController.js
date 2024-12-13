@@ -1,14 +1,25 @@
 const Project = require("../models/projectModel");
 const mongoose = require("mongoose");
 
-// GET all projects
+// GET all projects with timeout
 const getAllProjects = async (req, res) => {
   try {
-    const user_id = req.user._id;
-    const projects = await Project.find({ user_id }).sort({ createdAt: -1 });
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Database timeout')), 8000)
+    );
+    
+    const projectsPromise = Project.find({ user_id: req.user._id }).sort({
+      createdAt: -1,
+    });
+
+    const projects = await Promise.race([projectsPromise, timeoutPromise]);
     res.status(200).json(projects);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    if (error.message === 'Database timeout') {
+      res.status(504).json({ error: 'Request timed out' });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
   }
 };
 

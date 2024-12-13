@@ -15,98 +15,75 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+
+// Optimize MongoDB connection
+let cachedDb = null;
+
+async function connectToDatabase() {
+  if (cachedDb) {
+    return cachedDb;
+  }
+
+  try {
+    const client = await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s
+      socketTimeoutMS: 30000, // Close sockets after 30s
+      connectTimeoutMS: 10000, // Give up initial connection after 10s
+      maxPoolSize: 10, // Maintain up to 10 socket connections
+    });
+
+    cachedDb = client;
+    return client;
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    throw error;
+  }
+}
+
+// Connect to DB before handling requests
+app.use(async (req, res, next) => {
+  try {
+    await connectToDatabase();
+    next();
+  } catch (error) {
+    return res.status(500).json({ error: 'Database connection failed' });
+  }
+});
+
+// Add timeout middleware
 app.use((req, res, next) => {
-  console.log(req.path, req.method);
+  // Set timeout to 10 seconds
+  req.setTimeout(10000, () => {
+    res.status(504).json({ error: 'Request timeout' });
+  });
   next();
 });
 
-// Error logging
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-});
-
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
-});
-
-// Test route
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'API is working' });
+// Test route with quick response
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
 });
 
 // routes
 app.use("/api/projects", projectsRoutes);
 app.use("/api/user", userRoutes);
 
-// Error handling middleware
+// Error handling
 app.use((err, req, res, next) => {
-  console.error('Error details:', {
-    name: err.name,
-    message: err.message,
-    stack: err.stack,
-    path: req.path,
-    method: req.method
-  });
-  
+  console.error('Error:', err);
   res.status(500).json({
     error: 'Internal Server Error',
     message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
   });
 });
 
-// connecting to the database(mongodb)
-mongoose.set("strictQuery", false);
-
-// Only connect to MongoDB if we're not in a Vercel environment
+// For local development
 if (process.env.NODE_ENV !== 'production') {
-  mongoose
-    .connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000,
-    })
-    .then(() => {
-      const port = process.env.PORT || 4000;
-      app.listen(port, () => {
-        console.log(`Connected to MongoDB & Server running on port ${port}`);
-      });
-    })
-    .catch((error) => {
-      console.error('MongoDB connection error details:', {
-        name: error.name,
-        message: error.message,
-        stack: error.stack
-      });
-      process.exit(1);
-    });
-}
-
-// For Vercel, we'll connect to MongoDB for each request
-if (process.env.NODE_ENV === 'production') {
-  let cachedDb = null;
-
-  async function connectToDatabase() {
-    if (cachedDb) {
-      return cachedDb;
-    }
-    
-    const db = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    
-    cachedDb = db;
-    return db;
-  }
-
-  app.use(async (req, res, next) => {
-    try {
-      await connectToDatabase();
-      next();
-    } catch (error) {
-      console.error('MongoDB connection error:', error);
-      res.status(500).json({ error: 'Database connection failed' });
-    }
+  const port = process.env.PORT || 4000;
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
   });
 }
 
