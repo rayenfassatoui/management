@@ -19,17 +19,5 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.1",
     "validator": "^13.9.0"
-  },
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "server.js"
-    }
-  ]
+  }
 }

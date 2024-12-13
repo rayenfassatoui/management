@@ -27,6 +27,11 @@ app.use((req, res, next) => {
 app.use("/api/projects", projectsRoutes);
 app.use("/api/user", userRoutes);
 
+// Add this before your other routes
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Server is running' });
+});
+
 // Add this after your routes
 app.use((req, res) => {
   res.status(404).json({ error: "Route not found" });
@@ -43,6 +48,8 @@ mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
   })
   .then(() => {
     app.listen(port, () => {
