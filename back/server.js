@@ -38,8 +38,27 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Something broke!" });
+  console.error('Error details:', {
+    name: err.name,
+    message: err.message,
+    stack: err.stack,
+    path: req.path,
+    method: req.method
+  });
+  
+  res.status(500).json({
+    error: 'Internal Server Error',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+  });
+});
+
+// Add this near the top of your file after the imports
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
 });
 
 // connecting to the database(mongodb)
@@ -49,14 +68,23 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     serverSelectionTimeoutMS: 5000,
-    socketTimeoutMS: 45000,
   })
   .then(() => {
+    console.log('MongoDB connected successfully');
     app.listen(port, () => {
-      console.log(`Connected to MongoDB & Server running on port ${port}`);
+      console.log(`Server running on port ${port}`);
     });
   })
   .catch((error) => {
-    console.log('MongoDB connection error:', error.message);
+    console.error('MongoDB connection error details:', {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    });
     process.exit(1);
   });
+
+// Add a test route to verify basic functionality
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API is working' });
+});
